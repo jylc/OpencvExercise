@@ -7,18 +7,25 @@ project ("RobustImageStitching")
 
 find_package(OpenCV REQUIRED)
 
+
 if(OpenCV_FOUND)
 	message(STATUS "Find the opencv")
 	include_directories(${OpenCV_INCLUDE_DIRS})
-	# 将源代码添加到此项目的可执行文件。
-
-	# TODO: 如有需要，请添加测试并安装目标。
-
-endif()
+endif(OpenCV_FOUND)
 
 add_executable (RobustImageStitching "RobustImageStitching.cpp" "RobustImageStitching.h")
 if(OpenCV_FOUND)
 	link_directories(${OpenCV_LIBRARY_DIRS})
 	target_link_libraries(RobustImageStitching ${OpenCV_LIBS})
-endif()
+endif(OpenCV_FOUND)
 
+if(MSVC)
+	message(STATUS "Find the opencv")
+	file(GLOB RESOURCES "./datas")
+	add_custom_command(TARGET RobustImageStitching
+	POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${RESOURCES}
+	"$<TARGET_FILE_DIR:RobustImageStitching>"
+	)
+endif(MSVC)
