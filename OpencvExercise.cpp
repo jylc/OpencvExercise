@@ -5,18 +5,13 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <string>
-
+#include <cmath>
+#include <numeric>
+#include "MatUsage.h"
 using namespace std;
 
 int main() {
-    vector<string> subdirs;
-    string parent("/var/CppProjects");
-    LoadDirectories(parent, subdirs);
-    if (!subdirs.empty()) {
-        for (auto &dir:subdirs) {
-            cout << dir << endl;
-        }
-    }
+    MatUsage::MatUsageTest();
     cv::waitKey();
     return 0;
 }

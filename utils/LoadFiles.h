@@ -8,13 +8,20 @@
 #include <fstream>
 #include <cstring>
 #include <vector>
+#include <iostream>
 #include "Logger.h"
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+using namespace std;
 #ifdef __WIN32__
 #include <io.h>
 #endif // !__WIN32__
 
 #ifdef __linux__
+
 #include <dirent.h>
+
 #endif // !__linux__
 
 static void LoadDirectories(std::string &parent, std::vector<std::string> &subdirs) {
@@ -62,6 +69,52 @@ static void LoadDirectories(std::string &parent, std::vector<std::string> &subdi
         _findclose(hFile);
     }
 #endif // !__WIN32__
+}
+
+
+cv::Mat ReadImage() {
+    Mat image = imread("/media/moicena/0D951B4C0D951B4C/电脑壁纸/pixiv/pic1.png", IMREAD_COLOR);
+    Size size(image.cols / 2, image.rows / 2);
+    resize(image, image, size);
+    imshow("girl", image);
+    cout << "rows = " << image.rows << ", cols = " << image.cols << endl;
+    return image;
+}
+
+
+void PrintMatrix(const cv::Mat &matrix) {
+    for (size_t i = 0; i < matrix.cols; i++) {
+        for (size_t j = 0; j < matrix.rows; j++)
+            std::cout << matrix.at<float>(i, j) << " ";
+
+        std::cout << std::endl;
+    }
+}
+
+void GetTranslatedImage(float x, float y) {
+    cv::Mat image = ReadImage();
+    cv::Mat res1;
+    cv::Mat shiftMat = cv::Mat::zeros(2, 3, CV_32FC1);
+    shiftMat.at<float>(0, 0) = 1;
+    shiftMat.at<float>(1, 1) = 1;
+    shiftMat.at<float>(0, 2) = x;
+    shiftMat.at<float>(1, 2) = y;
+    cv::warpAffine(image, res1, shiftMat, image.size());
+    cv::imshow("result", res1);
+
+    std::pair<int, int> shift;
+    shift.first = 200;
+    shift.second = -100;
+    auto up = (std::abs(shift.second) + shift.second) / 2;
+    auto left = (std::abs(shift.first) + shift.first) / 2;
+    auto down = (std::abs(shift.second) - shift.second) / 2;
+    auto right = (std::abs(shift.first) - shift.first) / 2;
+    auto width = image.cols - right - left;
+    auto height = image.rows - down - up;
+    std::printf("up %d,down %d,left %d,right %d\n", up, down, left, right);
+    cv::Rect rect1(right, down, width, height);
+    cv::Mat res2 = image(rect1);
+    cv::imshow("result2", res2);
 }
 
 
