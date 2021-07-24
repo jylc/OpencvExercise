@@ -4,6 +4,7 @@
 
 #include "MatUsage.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -26,3 +27,14 @@ void MatUsage::MatUsageTest() {
     cv::Mat result1 = center_tr.mul(center_tr);
     cout << result1 << endl;
 }
+
+//MatLab meshgrid
+void MatUsage::MeshGrid(const Range &xgv, const Range &ygv, Mat &x, Mat &y) {
+    std::vector<int> X, Y;
+    for (int i = xgv.start; i < xgv.end; i++) { X.emplace_back(i); }
+    for (int j = ygv.start; j < ygv.end; j++) { Y.emplace_back(j); }
+    cout<<cv::Mat(X).t()<<endl;
+    cv::repeat(cv::Mat(X).t(), Y.size(), 1, x);
+    cv::repeat(cv::Mat(Y), 1, X.size(), y);
+}
+

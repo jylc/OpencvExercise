@@ -8,10 +8,12 @@
 #include <cmath>
 #include <numeric>
 #include "MatUsage.h"
+
 using namespace std;
+using namespace cv;
 
 int main() {
-    MatUsage::MatUsageTest();
+    GetTranslatedImage(200,-100);
     cv::waitKey();
     return 0;
 }

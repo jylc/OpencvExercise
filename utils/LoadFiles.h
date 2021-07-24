@@ -103,8 +103,8 @@ void GetTranslatedImage(float x, float y) {
     cv::imshow("result", res1);
 
     std::pair<int, int> shift;
-    shift.first = 200;
-    shift.second = -100;
+    shift.first = x;
+    shift.second = y;
     auto up = (std::abs(shift.second) + shift.second) / 2;
     auto left = (std::abs(shift.first) + shift.first) / 2;
     auto down = (std::abs(shift.second) - shift.second) / 2;
